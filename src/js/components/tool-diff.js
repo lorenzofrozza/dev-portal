@@ -154,7 +154,14 @@ async function copiarTexto(texto) {
 }
 
 const CLASSE_FOCO = 'focus-visible:outline-2 focus-visible:outline-navy focus-visible:outline-offset-2';
-const FUNDO = { '-': 'bg-red-soft', '+': 'bg-leaf-soft', '=': '' };
+// Linha alterada = fundo + faixa mais forte na numeração + barra na borda esquerda:
+// a diferença aparece mesmo em telas com pouco contraste ou com brilho alto.
+const FUNDO = { '-': 'bg-red-line', '+': 'bg-leaf-line', '=': '' };
+const FAIXA = { '-': 'bg-red-gutter', '+': 'bg-leaf-gutter', '=': '' };
+const NUMERO = { '-': 'text-ink', '+': 'text-ink', '=': 'text-muted' };
+const BARRA = { '-': 'border-l-4 border-red-deep', '+': 'border-l-4 border-leaf', '=': 'border-l-4 border-transparent' };
+// Onde a linha não existe de um lado (lado a lado), listras em vez de branco.
+const SEM_LINHA = 'bg-paper bg-[repeating-linear-gradient(-45deg,var(--color-line)_0_1px,transparent_1px_7px)]';
 const SINAL = { '-': '−', '+': '+', '=': '' };
 const LEITURA = { '-': 'removida: ', '+': 'adicionada: ', '=': '' };
 
@@ -332,9 +339,9 @@ class ToolDiff extends HTMLElement {
   linhaUnificada(o) {
     const linha = el('div', `grid grid-cols-[3rem_3rem_1.5rem_1fr] ${FUNDO[o.tipo]}`);
     linha.append(
-      el('span', 'select-none px-2 py-0.5 text-right text-muted', o.a === undefined ? '' : String(o.a + 1)),
-      el('span', 'select-none px-2 py-0.5 text-right text-muted', o.b === undefined ? '' : String(o.b + 1)),
-      this.sinal(o.tipo),
+      el('span', `select-none px-2 py-0.5 text-right ${NUMERO[o.tipo]} ${FAIXA[o.tipo]} ${BARRA[o.tipo]}`, o.a === undefined ? '' : String(o.a + 1)),
+      el('span', `select-none px-2 py-0.5 text-right ${NUMERO[o.tipo]} ${FAIXA[o.tipo]}`, o.b === undefined ? '' : String(o.b + 1)),
+      this.sinal(o.tipo, FAIXA[o.tipo]),
       el('span', 'whitespace-pre-wrap wrap-anywhere py-0.5 pr-4 text-ink', o.texto)
     );
     return linha;
@@ -367,11 +374,14 @@ class ToolDiff extends HTMLElement {
   parLadoALado(esq, dir) {
     const linha = el('div', 'grid grid-cols-[3rem_1.5rem_1fr_3rem_1.5rem_1fr]');
     const lado = (o, chave, tipoDoLado) => {
-      if (!o) return [el('span', 'col-span-3 bg-paper')];
+      // A metade direita começa com uma divisória, para as duas colunas não se misturarem.
+      const divisoria = tipoDoLado === '+' ? 'border-l-2 border-line' : '';
+      if (!o) return [el('span', `col-span-3 ${SEM_LINHA} ${divisoria}`)];
       const tipo = o.tipo === '=' ? '=' : tipoDoLado;
+      const barra = tipo === '=' ? divisoria : BARRA[tipo];
       return [
-        el('span', `select-none px-2 py-0.5 text-right text-muted ${FUNDO[tipo]}`, String(o[chave] + 1)),
-        this.sinal(tipo, FUNDO[tipo]),
+        el('span', `select-none px-2 py-0.5 text-right ${NUMERO[tipo]} ${FAIXA[tipo]} ${barra}`, String(o[chave] + 1)),
+        this.sinal(tipo, FAIXA[tipo]),
         el('span', `whitespace-pre-wrap wrap-anywhere py-0.5 pr-3 text-ink ${FUNDO[tipo]}`, o.texto),
       ];
     };

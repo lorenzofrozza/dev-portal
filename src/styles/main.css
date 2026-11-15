@@ -15,6 +15,14 @@
   --color-red-deep: #B02020;
   --color-red-soft: #FAE8E8;
 
+  /* Diff: linha alterada e faixa da numeração (mais fortes que os -soft, para a
+     diferença saltar aos olhos). Contraste AA conferido: texto ≥ 10:1; sinais
+     − e + sobre a faixa ≥ 4,5:1. */
+  --color-red-line: #FCD9D9;
+  --color-red-gutter: #F9C8C8;
+  --color-leaf-line: #D3EFD9;
+  --color-leaf-gutter: #B8E4C2;
+
   /* Fontes do sistema — nenhuma requisição externa (regra em docs/REGRAS.md). */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
