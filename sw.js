@@ -7,7 +7,7 @@
  *   e torna o comportamento offline determinístico e auditável.
  */
 
-const VERSION = 'dev-v4';
+const VERSION = 'dev-v5';
 
 const ASSETS = [
   './',
