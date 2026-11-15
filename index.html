@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content=".DEV — ferramentas para desenvolvedores com processamento 100% no navegador. Nada sai do seu dispositivo." />
+  <title>.DEV — Ferramentas para Desenvolvedores</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/icon-192.png" type="image/png" />
+  <meta name="theme-color" content="#1F3864" />
+</head>
+<body class="bg-paper text-ink font-sans min-h-screen">
+
+  <!-- Topbar -->
+  <header class="bg-white border-b-2 border-line">
+    <div class="flex items-center gap-4 px-5 py-4">
+      <a href="#/" class="flex items-baseline gap-3 no-underline">
+        <span class="text-2xl font-extrabold tracking-tight text-navy">.DEV</span>
+        <span class="hidden sm:inline text-sm text-muted">ferramentas para desenvolvedores</span>
+      </a>
+      <span id="offline-badge" class="ml-auto hidden items-center gap-2 rounded-full bg-leaf-soft px-4 py-1.5 text-sm font-bold text-leaf">
+        <span class="inline-block h-3 w-3 rounded-full bg-leaf"></span> Offline pronto
+      </span>
+    </div>
+  </header>
+
+  <div class="flex min-h-[calc(100vh-65px)]">
+
+    <!-- Sidebar (desktop) -->
+    <aside class="hidden md:flex w-72 shrink-0 flex-col border-r-2 border-line bg-white">
+      <p class="px-6 pt-6 pb-2 text-xs font-bold tracking-wider text-muted">FERRAMENTAS</p>
+      <nav id="nav-tools" class="px-3 flex flex-col gap-1" aria-label="Ferramentas"></nav>
+
+      <p class="px-6 pt-6 pb-2 text-xs font-bold tracking-wider text-muted/60">EM BREVE</p>
+      <ul id="nav-soon" class="px-6 flex flex-col gap-2 text-sm text-muted/60"></ul>
+
+      <div class="mt-auto m-4 rounded-xl bg-leaf-soft px-4 py-3 text-sm font-bold text-leaf">
+        0 requisições de rede com seus dados
+      </div>
+    </aside>
+
+    <!-- Área principal -->
+    <main class="flex-1 min-w-0">
+      <!-- Nav mobile -->
+      <nav id="nav-mobile" class="md:hidden flex gap-2 overflow-x-auto px-4 py-3 border-b border-line bg-white" aria-label="Ferramentas"></nav>
+
+      <div id="tool-root" class="p-5 md:p-8 max-w-5xl"></div>
+
+      <footer class="px-5 md:px-8 pb-8 max-w-5xl">
+        <hr class="border-line mb-4" />
+        <p class="text-sm text-muted">Sem anúncios · Sem rastreamento · Funciona offline após o primeiro acesso</p>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module" src="./src/js/app.js"></script>
+</body>
+</html>

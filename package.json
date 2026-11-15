@@ -1,0 +1,15 @@
+{
+  "name": "dev-portal",
+  "version": "0.1.0",
+  "private": true,
+  "description": ".DEV — portal de ferramentas para desenvolvedores com processamento 100% client-side (TCC ADS/ULBRA 2026-2)",
+  "scripts": {
+    "css": "tailwindcss -i src/styles/main.css -o assets/styles.css --minify",
+    "watch": "tailwindcss -i src/styles/main.css -o assets/styles.css --watch",
+    "serve": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}

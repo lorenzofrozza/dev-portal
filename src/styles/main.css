@@ -1,0 +1,21 @@
+/* Entrada do Tailwind v4 — compilar com `npm run css`. NÃO editar assets/styles.css à mão. */
+@import "tailwindcss";
+
+/* Tokens de design do .DEV — as cores dos wireframes (docs/assets/). */
+@theme {
+  --color-navy: #1F3864;
+  --color-navy-deep: #162848;
+  --color-ink: #1C2430;
+  --color-muted: #5A6B84;
+  --color-paper: #F6F8FC;
+  --color-line: #D9E1EE;
+  --color-mist: #EEF3FA;
+  --color-leaf: #2F6B3A;
+  --color-leaf-soft: #E4F1E7;
+  --color-red-deep: #B02020;
+  --color-red-soft: #FAE8E8;
+
+  /* Fontes do sistema — nenhuma requisição externa (regra em docs/REGRAS.md). */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
