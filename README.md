@@ -2,6 +2,8 @@
 
 Ferramentas do dia a dia de desenvolvimento (JSON, CPF/CNPJ de teste, regex, diff) com **processamento 100% no navegador**: nenhum dado inserido é transmitido pela rede, e o portal funciona offline após o primeiro acesso.
 
+**Acesse:** https://lorenzofrozza.github.io/dev-portal/
+
 Projeto de Desenvolvimento de Software — Análise e Desenvolvimento de Sistemas, ULBRA Torres, 2026/2.
 
 > Regras do projeto em `docs/REGRAS.md`. Documentação em `docs/` (requisitos, arquitetura, plano de ciclos, protocolo de validação).
