@@ -87,7 +87,11 @@ export function validar(texto) {
 
   const esperado = (tipo === 'CPF' ? completarCpf(nums.slice(0, 9)) : completarCnpj(nums.slice(0, 12))).join('');
   if (esperado === digitos) return { ok: true, tipo, msg: `✓ ${tipo} válido — dígitos verificadores conferem.` };
-  return { ok: false, tipo, msg: `✗ ${tipo} inválido — os dígitos verificadores deveriam ser ${esperado.slice(-2)}.` };
+  return {
+    ok: false,
+    tipo,
+    msg: `✗ ${tipo} inválido — os dígitos verificadores deveriam ser ${esperado.slice(-2)} (${formatar(esperado, true)}).`,
+  };
 }
 
 /**
