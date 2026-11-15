@@ -22,6 +22,8 @@ Três frentes, conforme a proposta: verificação técnica de privacidade, verif
 
 ## 2. Verificação funcional — casos de teste por ferramenta
 
+A lógica de cada caso (exceto os de interface, como J4 e C5) também roda automaticamente com `npm test` (`tests/ferramentas.test.mjs`), junto com testes de propriedade em milhares de entradas aleatórias.
+
 ### tool-json
 | Caso | Entrada | Esperado |
 |---|---|---|

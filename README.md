@@ -14,6 +14,7 @@ Projeto de Desenvolvimento de Software — Análise e Desenvolvimento de Sistema
 npm install        # uma vez (só devDependencies: Tailwind)
 npm run css        # compila src/styles/main.css → assets/styles.css
 npm run serve      # http://localhost:8080  (o Service Worker exige http://, não file://)
+npm test           # testes automatizados da lógica das ferramentas (Node 20+)
 ```
 
 Durante o desenvolvimento: `npm run watch` em um terminal e `npm run serve` em outro.

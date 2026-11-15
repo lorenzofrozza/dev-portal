@@ -6,7 +6,8 @@
   "scripts": {
     "css": "tailwindcss -i src/styles/main.css -o assets/styles.css --minify",
     "watch": "tailwindcss -i src/styles/main.css -o assets/styles.css --watch",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "test": "node --test tests/"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.0",

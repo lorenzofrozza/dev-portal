@@ -30,7 +30,7 @@ dev-portal/
 ├── index.html              ← casca (topbar, sidebar, área da ferramenta)
 ├── sw.js                   ← Service Worker (ASSETS + VERSION)
 ├── manifest.webmanifest    ← manifest PWA
-├── package.json            ← scripts de build do Tailwind (única devDependency)
+├── package.json            ← scripts: css, watch, serve, test (única devDependency: Tailwind)
 ├── assets/
 │   ├── styles.css          ← GERADO por `npm run css` — não editar à mão
 │   └── icon-*.png          ← ícones PWA
@@ -39,10 +39,11 @@ dev-portal/
 │   └── js/
 │       ├── app.js          ← registro TOOLS, roteador, sidebar, registro do SW
 │       └── components/
-│           ├── tool-json.js   ← implementada (padrão de referência)
-│           ├── tool-cpf.js    ← stub (ciclo 2)
-│           ├── tool-regex.js  ← stub (ciclo 3)
-│           └── tool-diff.js   ← stub (ciclo 4)
+│           ├── tool-json.js   ← ciclo 1 (padrão de referência)
+│           ├── tool-cpf.js    ← ciclo 2
+│           ├── tool-regex.js  ← ciclo 3
+│           └── tool-diff.js   ← ciclo 4
+├── tests/                  ← testes automatizados da lógica (`npm test`, node:test, sem dependências)
 └── docs/                   ← requisitos, plano, validação, decisões, assets do TCC
 ```
 
