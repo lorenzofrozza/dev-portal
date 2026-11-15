@@ -7,7 +7,7 @@
  *   e torna o comportamento offline determinístico e auditável.
  */
 
-const VERSION = 'dev-v3';
+const VERSION = 'dev-v4';
 
 const ASSETS = [
   './',
@@ -25,7 +25,12 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(VERSION).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches
+      .open(VERSION)
+      // cache: 'reload' ignora o cache HTTP do navegador: sem isso, logo após um
+      // deploy o SW novo pode gravar cópias antigas (o Pages manda guardar por 10 min).
+      .then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
   );
 });
 
