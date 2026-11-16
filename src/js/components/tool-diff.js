@@ -12,6 +12,7 @@
 const CONTEXTO = 3;                 // linhas iguais ao redor de cada mudança (igual ao diff -u)
 const MAX_CELULAS = 10_000_000;     // tabela da LCS: ~20 MB em Uint16; acima disso, recusa com aviso
 const MAX_LINHAS_EXIBIDAS = 3000;   // linhas renderizadas; o diff copiado é sempre completo
+const MIN_RECOLHER = 5;             // trechos iguais menores aparecem inteiros: a barra ocuparia o mesmo espaço
 const ESPERA_DIGITACAO_MS = 250;
 
 /** Quebra em linhas aceitando \n, \r\n e \r; a quebra final não conta como linha extra. */
@@ -217,6 +218,7 @@ class ToolDiff extends HTMLElement {
     this.$copiar = this.querySelector('#diff-copiar');
     this.$resultado = this.querySelector('#diff-resultado');
     this.modo = 'unificado';
+    this.abertos = new Set(); // trechos recolhidos que o usuário abriu (índice da 1ª linha)
 
     const agendar = () => {
       clearTimeout(this.espera);
@@ -250,6 +252,7 @@ class ToolDiff extends HTMLElement {
     const textoA = this.$a.value;
     const textoB = this.$b.value;
     this.ops = null;
+    this.abertos.clear();
     this.$copiar.classList.add('hidden');
     this.$resultado.classList.add('hidden');
 
@@ -299,41 +302,72 @@ class ToolDiff extends HTMLElement {
     });
   }
 
-  /** RF17 + RF18 — linhas recolhidas fora dos blocos, contexto em volta das mudanças. */
+  /**
+   * RF17 + RF18 — contexto em volta das mudanças; trechos iguais longos ficam
+   * recolhidos atrás de um botão que os abre (os curtos aparecem direto).
+   */
   renderizar() {
     this.marcarModo();
     if (!this.ops) return;
     const ladoALado = this.modo === 'lado' && telaMedia.matches;
-    const bs = blocos(this.ops);
+
+    // 1) Segmentos: { ops } a exibir ou { inicio, qtd } recolhido.
+    const segmentos = [];
+    const exibir = (ops) => {
+      const ultimo = segmentos.at(-1);
+      if (ultimo?.ops) ultimo.ops.push(...ops);
+      else segmentos.push({ ops: [...ops] });
+    };
+    const trechoIgual = (inicio, fim) => {
+      const qtd = fim - inicio;
+      if (qtd <= 0) return;
+      if (qtd < MIN_RECOLHER || this.abertos.has(inicio)) exibir(this.ops.slice(inicio, fim));
+      else segmentos.push({ inicio, qtd });
+    };
+    let anterior = 0;
+    for (const bloco of blocos(this.ops)) {
+      trechoIgual(anterior, bloco.inicio);
+      exibir(bloco.ops);
+      anterior = bloco.fim + 1;
+    }
+    trechoIgual(anterior, this.ops.length);
+
+    // 2) Linhas na tela, até o limite.
     const linhasHtml = [];
     let exibidas = 0;
-    let anterior = 0;
-
-    const recolhidas = (qtd) => {
-      if (qtd > 0) {
-        linhasHtml.push(el('div', 'border-y border-line bg-mist px-4 py-1 font-sans text-xs text-muted',
-          `⋯ ${qtd} ${qtd === 1 ? 'linha igual' : 'linhas iguais'}`));
-      }
-    };
-
-    for (const bloco of bs) {
+    for (const seg of segmentos) {
       if (exibidas >= MAX_LINHAS_EXIBIDAS) break;
-      recolhidas(bloco.inicio - anterior);
-      const novas = ladoALado ? this.linhasLadoALado(bloco.ops) : bloco.ops.map((o) => this.linhaUnificada(o));
+      if (!seg.ops) {
+        linhasHtml.push(this.botaoRecolhidas(seg));
+        continue;
+      }
+      const novas = ladoALado ? this.linhasLadoALado(seg.ops) : seg.ops.map((o) => this.linhaUnificada(o));
       const cabe = novas.slice(0, MAX_LINHAS_EXIBIDAS - exibidas);
       linhasHtml.push(...cabe);
       exibidas += cabe.length;
-      anterior = bloco.fim + 1;
     }
     if (exibidas >= MAX_LINHAS_EXIBIDAS) {
       linhasHtml.push(el('div', 'bg-mist px-4 py-2 font-sans text-sm text-muted',
         `Mostrando as primeiras ${MAX_LINHAS_EXIBIDAS} linhas — o diff copiado sai completo.`));
-    } else {
-      recolhidas(this.ops.length - anterior);
     }
 
     this.$resultado.replaceChildren(...linhasHtml);
     this.$resultado.classList.remove('hidden');
+  }
+
+  botaoRecolhidas({ inicio, qtd }) {
+    const btn = el('button', 'block w-full border-y border-line bg-mist px-4 py-1.5 text-left font-sans text-sm ' +
+      `font-semibold text-navy hover:bg-line ${CLASSE_FOCO}`);
+    btn.type = 'button';
+    const reticencias = el('span', 'mr-2', '⋯');
+    reticencias.setAttribute('aria-hidden', 'true');
+    btn.append(reticencias, `Mostrar ${qtd} linhas iguais`);
+    btn.addEventListener('click', () => {
+      this.abertos.add(inicio);
+      this.renderizar();
+      this.$resultado.focus({ preventScroll: true }); // o botão some; o foco não pode cair no topo da página
+    });
+    return btn;
   }
 
   linhaUnificada(o) {
